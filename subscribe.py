@@ -6,7 +6,6 @@ from typing import List, Tuple
 from bloxroute_cli.provider.cloud_wss_provider import WsProvider
 from twilio.rest import Client
 from dotenv import load_dotenv
-import logging
 
 # Initialize environment variables
 load_dotenv()
@@ -28,12 +27,6 @@ words = set(re.sub("[^\w]", " ", file.read()).split())
 
 COMMON_SPAM = ["Mooncats", "Firebit", "ALBET.IO", "FLUF"]
 
-logging.basicConfig()
-fileHandler = logging.FileHandler("output.log")
-logger = logging.getLogger("scraper")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(fileHandler)
-
 
 # Check if it is a dictionary word
 def is_word(word):
@@ -49,7 +42,7 @@ async def main():
                     headers={"Authorization": BLOXROUTE_AUTH_HEADER}
             ) as ws:
                 subscription_id = await ws.subscribe("newTxs", {"include": ["tx_hash", "tx_contents"]})
-                logger.info("feed started")
+                print("feed started")
                 while True:
                     next_notification = await ws.get_next_subscription_notification_by_id(subscription_id)
                     tx = next_notification.notification
@@ -61,8 +54,8 @@ async def main():
                             print_string += token + " "
                     if len(print_string) > 3:
                         to_from = tx["txContents"]["from"] + " -> " + tx["txContents"]["to"] + "\n"
-                        logger.info(to_from + print_string)
-                        logger.debug(utf)
+                        print(to_from + print_string)
+                        print(utf)
                         if SEND_TEXTS:
                             asyncio.create_task(send_text(to_from + print_string))
 
