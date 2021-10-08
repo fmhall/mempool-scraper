@@ -29,8 +29,10 @@ words = set(re.sub("[^\w]", " ", file.read()).split())
 COMMON_SPAM = ["Mooncats", "Firebit", "ALBET.IO", "FLUF"]
 
 logging.basicConfig()
+fileHandler = logging.FileHandler("output.log")
 logger = logging.getLogger("scraper")
 logger.setLevel(logging.DEBUG)
+logger.addHandler(fileHandler)
 
 
 # Check if it is a dictionary word
