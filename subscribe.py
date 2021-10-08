@@ -60,7 +60,7 @@ async def main():
                             asyncio.create_task(send_text(to_from + print_string))
 
         except Exception as e:
-            logger.error("Disconnection on " + str(datetime.datetime.now()) + str(e))
+            print("Disconnection on " + str(datetime.datetime.now()) + str(e))
             await asyncio.sleep(2)
 
 
